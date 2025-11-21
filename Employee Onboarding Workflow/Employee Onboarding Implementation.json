@@ -1,0 +1,873 @@
+{
+  "name": "Employee Onboarding Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## HR System Webhook (Trigger)\n\nWhen HR enters a new hire entry.",
+        "height": 336,
+        "width": 416,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -160,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "e29ebae0-3a4f-46c2-a8c0-f781dda24318",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1c87e121-6eb3-462c-b92a-5c0665cd3f06",
+              "leftValue": false,
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "924edf26-6f20-46ff-9055-e0d95dfef57d",
+              "leftValue": false,
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        528,
+        0
+      ],
+      "id": "fcc4feaa-55ec-40ff-b2a1-f04187447fad",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "## Pass",
+        "height": 416,
+        "width": 150,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        592,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "37281029-7bb4-4bf6-9c5e-3fc67b20c3f5",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Fail\n\n• Update Record\n• Notify HR (Optional)",
+        "height": 224,
+        "width": 198,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        592,
+        112
+      ],
+      "typeVersion": 1,
+      "id": "3a3b0296-30e6-4934-affc-659ac1a5aaac",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.bambooHr",
+      "typeVersion": 1,
+      "position": [
+        96,
+        0
+      ],
+      "id": "7bea6481-0bff-4507-81c8-a8ae6ce2af68",
+      "name": "Create an employee"
+    },
+    {
+      "parameters": {
+        "path": "1017360d-bd19-4330-a733-2bcc4cc6e6cf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -96,
+        0
+      ],
+      "id": "d0c7a667-de7d-4183-9226-27116ab31e18",
+      "name": "HRIS New-Hire Webhook",
+      "webhookId": "1017360d-bd19-4330-a733-2bcc4cc6e6cf"
+    },
+    {
+      "parameters": {
+        "content": "## Background Check Trigger\n\nWaits for response from separate system running background screening service (e.g., Checkr).",
+        "height": 336,
+        "width": 304,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        272,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "e53bfba0-c434-4c13-a307-7a5d7be06623",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        352,
+        0
+      ],
+      "id": "4fe95e2a-13a3-46ec-8208-28f627d94625",
+      "name": "Wait - On Webhook Call",
+      "webhookId": "efeb8e83-9591-42f6-89de-9d9bdd917aa0"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.bambooHr",
+      "typeVersion": 1,
+      "position": [
+        848,
+        176
+      ],
+      "id": "8281621e-7aca-48fa-a77b-c33065cb862f",
+      "name": "Update an employee"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.gSuiteAdmin",
+      "typeVersion": 1,
+      "position": [
+        864,
+        -544
+      ],
+      "id": "db993bc7-ab47-4653-9852-fbdae278f03a",
+      "name": "Google Workspace - Create a user"
+    },
+    {
+      "parameters": {
+        "resource": "channel",
+        "operation": "invite",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        864,
+        -384
+      ],
+      "id": "49e303ff-4bd6-442c-aea9-28fab776305f",
+      "name": "Slack - Invite a user",
+      "webhookId": "f592f9fc-ec69-4a5f-be89-4b470f99da83"
+    },
+    {
+      "parameters": {
+        "resource": "account",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.salesforce",
+      "typeVersion": 1,
+      "position": [
+        864,
+        -240
+      ],
+      "id": "c695b33b-45f9-42cb-b439-9acffa6848d0",
+      "name": "Salesforce - Create an account"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        -64
+      ],
+      "id": "9cd93d95-7f0d-4648-bc29-73e04d4ef9e4",
+      "name": "Post-Provisioning Tests"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1600,
+        -64
+      ],
+      "id": "71555683-7f46-4fe0-9fbb-e08067894e04",
+      "name": "Create an event"
+    },
+    {
+      "parameters": {
+        "content": "## Schedule Orientation",
+        "height": 272,
+        "width": 304,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1424,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "0dafc1ec-c6d4-4899-bfe8-e84daa9fabba",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        864,
+        -80
+      ],
+      "id": "7fa5fcf6-d505-4595-bb15-443ce59abc35",
+      "name": "Laptop Order Workflow Request - HTTP"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1120,
+        -96
+      ],
+      "id": "51d618d0-5983-404a-82ca-bbf42dd6820e",
+      "name": "Merge Flow"
+    },
+    {
+      "parameters": {
+        "content": "## Provisioning",
+        "height": 656,
+        "width": 336,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        688,
+        -560
+      ],
+      "typeVersion": 1,
+      "id": "54db997f-3e09-49f6-b40a-99f48a3b80a4",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1440,
+        -64
+      ],
+      "id": "efec5b7d-08f6-41af-996c-77196ee08b0c",
+      "name": "Get Availability"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.bambooHr",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        -64
+      ],
+      "id": "c52b6bf6-ffef-48cf-9805-e005605006f7",
+      "name": "Update Employee Records"
+    },
+    {
+      "parameters": {
+        "content": "## Finalize\n \nUpdate\n• provisioning_status\n• orientation time\n• laptop ticket ID\n• salesforce_id, etc\n\n**Send Welcome Email**",
+        "height": 384,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1744,
+        -272
+      ],
+      "typeVersion": 1,
+      "id": "22c0885a-c0e7-4eec-9e69-93c1267841f2",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1024,
+        176
+      ],
+      "id": "047ccacf-ccbf-4c12-b180-b05cc83d916a",
+      "name": "LLM Chain"
+    },
+    {
+      "parameters": {
+        "content": "### Summarize Reason & Email Formatting",
+        "height": 304,
+        "width": 480,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        992,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "5508534d-83ff-4590-8e5b-b706182257bd",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1104,
+        320
+      ],
+      "id": "c77e9890-2327-4e75-af38-bd95259e4199",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1968,
+        -64
+      ],
+      "id": "1fcabdb4-cfcf-44fe-bd61-d5825c220ccd",
+      "name": "Send welcome onboarding email",
+      "webhookId": "fd3734c3-d823-4367-a46a-57aa4487bf7e"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1328,
+        176
+      ],
+      "id": "08d6f5a5-f04d-46f1-8dc3-108f51df735b",
+      "name": "Notify HR",
+      "webhookId": "a9b9ce4c-793a-4ba9-a663-04297b9e8585"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4eac9052-560f-446e-8e18-27730566c104",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        912
+      ],
+      "id": "49ef9863-cd77-4f74-bb37-3945790be10b",
+      "name": "If employee exists"
+    },
+    {
+      "parameters": {
+        "resource": "channel",
+        "operation": "member",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        144,
+        912
+      ],
+      "id": "e4a53b51-0481-4f31-bb73-3844ea1f367f",
+      "name": "Get all members",
+      "webhookId": "3d32551b-3da1-4034-9e11-78c0a4941636"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.bambooHr",
+      "typeVersion": 1,
+      "position": [
+        960,
+        896
+      ],
+      "id": "9c18a35f-fa68-4bd5-a94e-d41609ac4976",
+      "name": "Update employee record"
+    },
+    {
+      "parameters": {
+        "content": "### Link Employee\n\nAdd Slack_ID ",
+        "height": 256,
+        "width": 224,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        896,
+        800
+      ],
+      "typeVersion": 1,
+      "id": "2324064c-8dec-4a4c-bdef-e269a436724f",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "### Check employee already exists\n\nMap employee using EID or Email\n\n\n\n\n\n\n\n\n\n\n\n\n• Don't use onboarding-id for mapping since employee could be onboarded twice in system with career gap or change in role.\n• Don't use firstname.lastname since it could potentially overlap.\n\n",
+        "height": 384,
+        "width": 272,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        288,
+        816
+      ],
+      "typeVersion": 1,
+      "id": "32a283f7-0384-4183-b519-74de5e6f5f24",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## Slack Provisioning Component [START]\n\nSub Workflow",
+        "height": 208,
+        "width": 176
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        896
+      ],
+      "typeVersion": 1,
+      "id": "772ae8a7-4b5c-49d0-b32c-a39640c8d86c",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "resource": "channel",
+        "operation": "invite",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        656,
+        1008
+      ],
+      "id": "7785cfbf-f13f-4537-9096-93e0e9744495",
+      "name": "Create or Invite a new user",
+      "webhookId": "16ff6cad-a6d0-4d9a-a11d-22e0efc43ecb"
+    },
+    {
+      "parameters": {
+        "content": "Skip Create",
+        "height": 80,
+        "width": 160,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        640,
+        880
+      ],
+      "typeVersion": 1,
+      "id": "84239b2c-26a9-4a63-9fa4-470712760e62",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        896
+      ],
+      "id": "ee85aaaa-9b8b-4832-a421-c65c6999bcf4",
+      "name": "Safeguard Code"
+    },
+    {
+      "parameters": {
+        "content": "### Post-Verification (Optional)\n\n\n\n\n\n\n\n\n\n\n\n\n\nCheck for duplicates, create logs, and take **dedupe actions**.\n",
+        "height": 320,
+        "width": 224,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1136,
+        800
+      ],
+      "typeVersion": 1,
+      "id": "000cdb9e-3ddf-4aa4-9a6f-758223bc88f6",
+      "name": "Sticky Note12"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HRIS New-Hire Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create an employee",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an employee": {
+      "main": [
+        [
+          {
+            "node": "Wait - On Webhook Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait - On Webhook Call": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Google Workspace - Create a user",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Slack - Invite a user",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Salesforce - Create an account",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Laptop Order Workflow Request - HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update an employee",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update an employee": {
+      "main": [
+        [
+          {
+            "node": "LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Workspace - Create a user": {
+      "main": [
+        [
+          {
+            "node": "Merge Flow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack - Invite a user": {
+      "main": [
+        [
+          {
+            "node": "Merge Flow",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Salesforce - Create an account": {
+      "main": [
+        [
+          {
+            "node": "Merge Flow",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Post-Provisioning Tests": {
+      "main": [
+        [
+          {
+            "node": "Get Availability",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Flow": {
+      "main": [
+        [
+          {
+            "node": "Post-Provisioning Tests",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Laptop Order Workflow Request - HTTP": {
+      "main": [
+        [
+          {
+            "node": "Merge Flow",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Get Availability": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event": {
+      "main": [
+        [
+          {
+            "node": "Update Employee Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Notify HR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Employee Records": {
+      "main": [
+        [
+          {
+            "node": "Send welcome onboarding email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all members": {
+      "main": [
+        [
+          {
+            "node": "If employee exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If employee exists": {
+      "main": [
+        [
+          {
+            "node": "Update employee record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create or Invite a new user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create or Invite a new user": {
+      "main": [
+        [
+          {
+            "node": "Update employee record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update employee record": {
+      "main": [
+        [
+          {
+            "node": "Safeguard Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b07ef01d-a54a-4c8e-be16-434618b23a44",
+  "meta": {
+    "instanceId": "5cddc1cd9337e32464ef4449195cda1810a034cdad132881b87d1170637277a1"
+  },
+  "id": "7izGKmWVIFzfmcKn",
+  "tags": []
+}

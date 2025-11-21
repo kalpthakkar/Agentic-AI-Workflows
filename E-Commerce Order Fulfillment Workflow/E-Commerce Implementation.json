@@ -1,0 +1,691 @@
+{
+  "name": "E-Commerce Order Fulfillment",
+  "nodes": [
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.shopify",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "28b991e7-4937-4cc4-87f2-16e43f036716",
+      "name": "Create an order"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        48,
+        0
+      ],
+      "id": "91fe1445-e665-4fab-b3e9-e229a9271441",
+      "name": "On form submission",
+      "webhookId": "cf02127b-99ef-47fc-b862-23207982e3e8"
+    },
+    {
+      "parameters": {
+        "resource": "charge",
+        "operation": "create",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.stripe",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -80
+      ],
+      "id": "2ae20338-6eab-48e7-b495-06469a6c9824",
+      "name": "Create a charge"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.payPal",
+      "typeVersion": 1,
+      "position": [
+        416,
+        80
+      ],
+      "id": "0425fc5d-7eb8-4235-8d47-b521e62008c6",
+      "name": "Create a payout"
+    },
+    {
+      "parameters": {
+        "content": "### Payment Options\n\nCustomer Enters Credentials",
+        "height": 416,
+        "width": 224,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        352,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "5cd5d8e3-19c0-4641-b8a7-770f2f2d1f68",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "985bcc9e-3432-423a-9e65-1ffe4a358863",
+              "leftValue": false,
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f0443d53-7b3e-4a79-923c-65ad33f698e2",
+              "leftValue": false,
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "84f9eb27-2148-4ba1-9a92-9bcfbd7e387d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "### Success",
+        "height": 80,
+        "width": 150,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        624,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "c7d6eae9-ff44-4971-b1bb-3036feed2197",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "### Fail",
+        "height": 80,
+        "width": 150,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        624,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "ebe9e3e5-b020-486f-971f-3ebce68323ed",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1184,
+        -64
+      ],
+      "id": "1941e1f9-b66a-4d1c-85a6-30e286ae96c1",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "content": "### Send **API** or **HTTP Get Query** to Warehouse system requesting for Stock",
+        "height": 224,
+        "width": 336,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        992,
+        -128
+      ],
+      "typeVersion": 1,
+      "id": "3b81025c-42fd-4794-b602-fb6ad93e9c90",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "### In-Stock",
+        "height": 112,
+        "width": 166,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1344,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "81bd6352-ebe0-45b8-a765-2b3ec181193c",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "### Out-of-Stock",
+        "height": 80,
+        "width": 166,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1344,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "6708cf42-b175-4989-8b5b-4f37cca43dbb",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "477c3982-e4da-4fcf-a5d9-efb23d940581",
+              "leftValue": false,
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "97547b82-d76a-42d5-b58c-f764fe0021bb",
+              "leftValue": false,
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1360,
+        -64
+      ],
+      "id": "628c5ed3-c93e-421c-ab6c-f7f4c947d1c5",
+      "name": " If"
+    },
+    {
+      "parameters": {
+        "content": "### Notify Customer \n**Append Invoice & Shipment, Tracking Information**",
+        "height": 336,
+        "width": 208,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1872,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "c696b696-bd0f-4224-ab4c-4d189f9dd42b",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1552,
+        -80
+      ],
+      "id": "3b514192-b29d-4374-b5ac-0d90130b6d1b",
+      "name": "Place Order"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        -304
+      ],
+      "id": "fce55592-4897-4f82-a983-137ece8f128c",
+      "name": "Queue Order"
+    },
+    {
+      "parameters": {
+        "content": "### POST Request to Warehouse System or DB",
+        "height": 336,
+        "width": 166,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1520,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "3284b2cb-339a-4f65-9d38-4567bd180711",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1728,
+        -80
+      ],
+      "id": "68721d83-0625-4f3e-96be-13b6dd54363c",
+      "name": "FedEx API"
+    },
+    {
+      "parameters": {
+        "content": "### Request Shipment Service (e.g. UPS, FedEx, USPS)\n\n",
+        "height": 336,
+        "width": 166,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1696,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "aa1e5b73-ad26-49c9-a79f-31ebfea79c76",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1920,
+        -80
+      ],
+      "id": "b4455c5c-eb19-4ff6-b3d8-3174f77036a2",
+      "name": "Send Confirmation Email",
+      "webhookId": "c642e88d-ae55-40f8-b2fd-f8ecb7e1fd13"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1184,
+        -304
+      ],
+      "id": "f669bd39-454d-4d00-af2a-64470ec8c063",
+      "name": "Send Alert Email",
+      "webhookId": "c49a9bd1-b0e0-478a-a378-63c92baa5128"
+    },
+    {
+      "parameters": {
+        "content": "### ERP Reporting System | Create Logs",
+        "height": 688,
+        "width": 208,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2096,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "9811cd9f-68a8-473a-9fc3-8c9866109078",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsDynamoDb",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        -304
+      ],
+      "id": "c9233522-dfc0-4880-a7db-7e07e02fdf4e",
+      "name": "AWS Database | Create Log"
+    },
+    {
+      "parameters": {
+        "batchSize": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        848,
+        144
+      ],
+      "id": "428219ca-57fb-41c0-a5fa-7b9d3999d739",
+      "name": "Loop | 3 Attempts"
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.awsDynamoDb",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        128
+      ],
+      "id": "449f56c9-8764-411f-b173-f999a5bb3e47",
+      "name": "AWS Database | Flag User"
+    },
+    {
+      "parameters": {
+        "content": "### Retail Form Trigger",
+        "height": 80,
+        "width": 160
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        32,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "9a3d55a8-3571-41cf-8728-ded155b2c7ff",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        848,
+        -80
+      ],
+      "id": "ff7e70fb-a361-4e86-9258-0397ba32f53e",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        -64
+      ],
+      "id": "346ffa3b-4431-4e33-bd2e-bb1f0397ae3f",
+      "name": "Find Next Nearest Warehouse"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Create an order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an order": {
+      "main": [
+        [
+          {
+            "node": "Create a charge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create a payout",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a charge": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a payout": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop | 3 Attempts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": " If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    " If": {
+      "main": [
+        [
+          {
+            "node": "Place Order",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Place Order": {
+      "main": [
+        [
+          {
+            "node": "FedEx API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queue Order": {
+      "main": [
+        [
+          {
+            "node": "Send Alert Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FedEx API": {
+      "main": [
+        [
+          {
+            "node": "Send Confirmation Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop | 3 Attempts": {
+      "main": [
+        [
+          {
+            "node": "AWS Database | Flag User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create an order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Queue Order",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Find Next Nearest Warehouse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Next Nearest Warehouse": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Alert Email": {
+      "main": [
+        [
+          {
+            "node": "AWS Database | Create Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Confirmation Email": {
+      "main": [
+        [
+          {
+            "node": "AWS Database | Create Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "72c434a8-dd4a-4876-a6e1-7f6828221815",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5cddc1cd9337e32464ef4449195cda1810a034cdad132881b87d1170637277a1"
+  },
+  "id": "ZV7JqtOo1woRhqSB",
+  "tags": []
+}
