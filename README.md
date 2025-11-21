@@ -136,7 +136,7 @@ Human-readable configs & simple code structures.
 
 ### 📥 Clone the Repo
 ```bash
-git clone https://github.com/<your-username>/Agentic-AI-Workflows.git
+git clone https://github.com/kalpthakkar/Agentic-AI-Workflows.git
 ```
 
 ```bash
